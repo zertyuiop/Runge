@@ -13,24 +13,15 @@ class Runge
   def self.f1(u, v)
     v
   end
-  def self.summ(u, v, p)
-    su = 0.0
-    S.times{|i| su += u[p, i] * v[i]}
-    su
-  end
   def self.f2(u, v)
     10.0 * v + 11.0 * u
   end
-  y = NArray.float(((Xn - X0) / H).to_int + 1)
-  y[0] = Yin
-  z = NArray.float(((Xn - X0) / H).to_int + 1)
-  z[0] = DYin
-  #  i from 1 to (Xn - X0) / H
+  y, z = NArray.float(((Xn - X0) / H).to_int + 1), NArray.float(((Xn - X0) / H).to_int + 1)
+  y[0], z[0] = Yin, DYin
   f = File.new('lib.txt', 'w')
   f.puts y[0]
   (((Xn - X0) / H).to_int).times do |i|
-    k1 = NArray.float(S)
-    k2 = NArray.float(S)
+    k1, k2 = NArray.float(S), NArray.float(S)
     S.times do |j|
       su = 0.0
       S.times{|k| su += A[k, j] * k1[k]}
@@ -39,8 +30,7 @@ class Runge
       S.times{|k| su += A[k, j] * k2[k]}
       k2[j] = f2(y[i] + H * su, z[i] + H * su) / (1.0 - H * f2(A[j, j], A[j, j]))
     end
-    y[i + 1] = y[i]
-    z[i + 1] = z[i]
+    y[i + 1], z[i + 1] = y[i], z[i]
     S.times do |j|
       y[i + 1] += H * B[j] * k1[j]
       z[i + 1] += H * B[j] * k2[j]
