@@ -18,20 +18,17 @@ class Runge
   end
   y, z = NArray.float(((Xn - X0) / H).to_int + 1), NArray.float(((Xn - X0) / H).to_int + 1)
   y[0], z[0] = Yin, DYin
-  #  i from 1 to (Xn - X0) / H
   p = File.new('lib.txt', 'w')
   p.puts Xin.to_s + ";" + y[0].to_s
   (((Xn - X0) / H).to_int).times do |i|
     k1, k2 = NArray.float(S), NArray.float(S)
     S.times do |j|
-      su = 0.0
-      su1 = 0.0
+      su, su1 = 0.0, 0.0
       S.times do |k|
         su += A[k, j] * k1[k]
         su1 += A[k, j] * k2[k]
       end
-      f = f1(y[i] + H * su, z[i] + H * su1)
-      g = f2(y[i] + H * su, z[i] + H * su1)
+      f, g = f1(y[i] + H * su, z[i] + H * su1), f2(y[i] + H * su, z[i] + H * su1)
       k1[j] = (f * (1 - C4 * H * A[j, j]) + C2 * H * A[j, j] * g) /
               ((1.0 - C4 * H * A[j, j]) * (1.0 - C1 * H * A[j, j]) -
               C2 * C3 * H * H * A[j, j] * A[j, j])
