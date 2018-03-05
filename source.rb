@@ -10,15 +10,6 @@ class Runge
              [17.0 / 50.0, -1.0 / 25.0, 1.0 / 4.0, 0.0, 0.0],
              [371.0 / 1360.0, -137.0 / 2720.0, 15.0 / 544.0, 1.0 / 4.0, 0.0],
              [25.0 / 24.0, -49.0 / 48.0, 125.0 / 16.0, -85.0 / 12.0, 1.0 / 4.0]]
-
-  def self.f1(u, v)
-    C1 * u + C2 * v
-  end
-
-  def self.f2(u, v)
-    C3 * u + C4 * v
-  end
-
   y, z = NArray.float(((Xn - X0) / H).to_int + 1), NArray.float(((Xn - X0) / H).to_int + 1)
   y[0], z[0] = Yin, DYin
   p = File.new('lib.txt', 'w')
@@ -31,7 +22,7 @@ class Runge
         su += A[k, j] * k1[k]
         su1 += A[k, j] * k2[k]
       end
-      f, g = f1(y[i] + H * su, z[i] + H * su1), f2(y[i] + H * su, z[i] + H * su1)
+      f, g = C1 * (y[i] + H * su) + C2 * (z[i] + H * su1), C3 * (y[i] + H * su) + C4 * (z[i] + H * su1)
       k1[j] = (f * (1 - C4 * H * A[j, j]) + C2 * H * A[j, j] * g) /
           ((1.0 - C4 * H * A[j, j]) * (1.0 - C1 * H * A[j, j]) -
               C2 * C3 * H * H * A[j, j] * A[j, j])
