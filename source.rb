@@ -24,7 +24,7 @@ class Runge
       end
       f, g = C1 * (y[i] + H * su) + C2 * (z[i] + H * su1), C3 * (y[i] + H * su) + C4 * (z[i] + H * su1)
       k1[j] = (f * (1 - C4 * H * A[j, j]) + C2 * H * A[j, j] * g) /
-          ((1.0 - C4 * H * A[j, j]) * (1.0 - C1 * H * A[j, j]) -
+              ((1.0 - C4 * H * A[j, j]) * (1.0 - C1 * H * A[j, j]) -
               C2 * C3 * H * H * A[j, j] * A[j, j])
       k2[j] = ((1 - C1 * H * A[j, j]) * k1[j] - f) / (C2 * H * A[j, j])
     end
